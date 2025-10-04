@@ -25,7 +25,8 @@ jobs:
         with:
           images: ${{ env.IMAGE_NAME }}
           tags: |
-            type=sha,prefix=${{ env.DEPLOY_ENV }}-
+            type=sha, 
+            prefix=${{ env.DEPLOY_ENV }}-
 
       # print tag info
       - name: Print tag info
