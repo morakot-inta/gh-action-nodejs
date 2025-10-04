@@ -61,7 +61,7 @@ jobs:
     outputs:
       IMAGE_REF: ${{ env.SHA_TAG }}
   
-  trivy-sca-security-scan:
+  trivy-sca-security-gate:
     needs: build-and-push
     runs-on: ubuntu-latest
     steps:
