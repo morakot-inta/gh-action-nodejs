@@ -24,7 +24,7 @@ jobs:
     steps:
       - name: print output 
         run: |
-          echo "Ouput ${{ needs.setup.outputs }}"
+          echo "Output ${{ toJson(needs.setup.outputs) }}"
 
 
 
