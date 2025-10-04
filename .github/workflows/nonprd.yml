@@ -41,8 +41,9 @@ jobs:
           COMMIT_SHA=$(echo "${GITHUB_SHA}" | cut -c1-7)
           echo "SHA_TAG=${{ env.IMAGE_NAME }}:${{ env.DEPLOY_ENV }}-${COMMIT_SHA}" >> $GITHUB_ENV
 
-          echo "GIHUB_ENV : $GITHUB_ENV"
-
+      - name: print tag image
+        run: |
+          echo "Tag Image with SHA: ${SHA_TAG}"
 
 
 
