@@ -59,13 +59,26 @@ jobs:
           build-args: |
             PORT=${{ env.PORT }}
   
-  deploy:
-    needs: [ build-and-push, setup-image-tag ]
+  trivy-sca-security-scan:
+    needs: build-and-push
     runs-on: ubuntu-latest
     steps:
-      - name: Deployment step
-        run: echo "${{ needs.setup-image-tag.outputs.SHA_TAG }}"
-
+      - name: Checkout code
+        uses: actions/checkout@v5
+      - name: Install Trivy
+        run: |
+          sudo apt-get install -y wget apt-transport-https gnupg lsb-release
+          wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+          echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
+          sudo apt-get update
+          sudo apt-get install trivy
+      - name: Scan Docker image for vulnerabilities
+        env:
+          IMAGE_NAME: ghcr.io/morakot-inta/gh-action-nodejs
+          DEPLOY_ENV: dev
+          SHA_TAG: ${{ needs.setup-image-tag.outputs.SHA_TAG }}
+        run: |
+          trivy image --severity HIGH,CRITICAL --exit-code 1 --no-progress $SHA_TAG
 
   
     
