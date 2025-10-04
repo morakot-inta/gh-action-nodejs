@@ -13,37 +13,16 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     env:
-      IMAGE_NAME: ghcr.io/yourusername/your-repo-name
-      DEPLOY_ENV: nonprd
+      IMAGE_NAME: ghcr.io/morakot-inta/gh-action-nodejs
+      DEPLOY_ENV: dev 
       PORT: 8080
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
-      # - name: Docker meta
-      #   id: meta
-      #   uses: docker/metadata-action@v5
-      #   with:
-      #     images: ${{ env.IMAGE_NAME }}
-      #     tags: |
-      #       type=sha, prefix=${{ env.DEPLOY_ENV }}-
-      # print tag info
-      # - name: Print tag info
-      #   run: |
-      #     echo "Image Name: ${{ env.IMAGE_NAME }}"
-      #     echo "Tags: ${{ steps.meta.outputs.tags }}"
-      #     echo "Labels: ${{ steps.meta.outputs.labels }}"
-
       - name: setup tag image with sha
         id: tag_image
-        env:
-          IMAGE_NAME: ghcr.io/yourusername/your-repo-name
         run: |
           COMMIT_SHA=$(echo "${GITHUB_SHA}" | cut -c1-7)
           echo "SHA_TAG=${{ env.IMAGE_NAME }}:${{ env.DEPLOY_ENV }}-${COMMIT_SHA}" >> $GITHUB_ENV
-
-      - name: print tag image
-        run: |
-          echo "Tag Image with SHA: ${SHA_TAG}"
-
 
 
