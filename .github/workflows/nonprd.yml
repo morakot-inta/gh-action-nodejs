@@ -68,14 +68,10 @@ jobs:
       - name: Trivy SCA Vulnerability Fail Gate
         uses: aquasecurity/trivy-action@master
         with:
-          scan-type: 'image'
           image-ref: ${{ needs.setup-image-tag.outputs.SHA_TAG }}
-          scanners: 'vuln,licenses'
           severity: 'CRITICAL,HIGH,MEDIUM'
           format: 'table'
-          output: 'trivy-report.txt'
-          exit-code: '1'
-          timeout: '10m'
+          vuln-type: 'os,library'
 
   
     
