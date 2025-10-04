@@ -58,6 +58,8 @@ jobs:
             ${{ env.SHA_TAG }}
           build-args: |
             PORT=${{ env.PORT }}
+    outputs:
+      IMAGE_REF: ${{ env.SHA_TAG }}
   
   trivy-sca-security-scan:
     needs: build-and-push
@@ -68,7 +70,7 @@ jobs:
       - name: Trivy SCA Vulnerability Fail Gate
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ${{ needs.setup-image-tag.outputs.SHA_TAG }}
+          image-ref: ${{ needs.setup-image-tag.outputs.IMAGE_REF }}
           severity: 'CRITICAL,HIGH,MEDIUM'
           format: 'table'
           vuln-type: 'os,library'
