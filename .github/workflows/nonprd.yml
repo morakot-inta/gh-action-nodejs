@@ -12,19 +12,22 @@ on:
 jobs:
   setup:
     runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: ghcr.io/yourusername/your-repo-name
+      DEPLOY_ENV: nonprd
+      PORT: 8080
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
-      - name: Set DEPLOY_ENV
-        run: echo "DEPLOY_ENV=nonprd" >> $GITHUB_ENV
-
-  output:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - name: print output 
-        run: |
-          echo "Output ${{ toJson(needs.setup.outputs) }}"
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=edge
+            type=sha,prefix=${{ env.DEPLOY_ENV }}-,priority=750
 
 
 
