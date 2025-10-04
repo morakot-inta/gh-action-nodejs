@@ -65,20 +65,17 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
-      - name: Install Trivy
-        run: |
-          sudo apt-get install -y wget apt-transport-https gnupg lsb-release
-          wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
-          echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
-          sudo apt-get update
-          sudo apt-get install trivy
-      - name: Scan Docker image for vulnerabilities
-        env:
-          IMAGE_NAME: ghcr.io/morakot-inta/gh-action-nodejs
-          DEPLOY_ENV: dev
-          SHA_TAG: ${{ needs.setup-image-tag.outputs.SHA_TAG }}
-        run: |
-          trivy image --severity HIGH,CRITICAL --exit-code 1 --no-progress $SHA_TAG
+      - name: Trivy SCA Vulnerability Fail Gate
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ needs.setup-image-tag.outputs.SHA_TAG }}
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH,MEDIUM'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          timeout: '10m'
+          scan-type: 'image'
 
   
     
