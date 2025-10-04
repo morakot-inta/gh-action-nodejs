@@ -10,7 +10,7 @@ on:
       # - '.github/workflows/**'
 
 jobs:
-  setup:
+  setup-image-tag:
     runs-on: ubuntu-latest
     env:
       IMAGE_NAME: ghcr.io/morakot-inta/gh-action-nodejs
@@ -28,5 +28,40 @@ jobs:
         run: |
           echo "SHA_TAG in this step: $SHA_TAG"  # ✅ ใช้ได้
           echo "SHA_TAG from env: ${{ env.SHA_TAG }}"  # ✅ ใช้ได้
+    outputs:
+      SHA_TAG: ${{ env.SHA_TAG }} 
+
+  build-and-push:
+    needs: setup-image-tag
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: ghcr.io/morakot-inta/gh-action-nodejs
+      DEPLOY_ENV: dev
+      PORT: 8080
+      SHA_TAG: ${{ needs.setup-image-tag.outputs.SHA_TAG }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+      - name: verify tag image
+        run: |
+          echo "SHA_TAG from env: ${{ env.SHA_TAG }}"  
+      # - name: Log in to GitHub Container Registry
+      #   uses: docker/login-action@v2
+      #   with:
+      #     registry: ghcr.io
+      #     username: ${{ github.actor }}
+      #     password: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Build and push Docker image
+      #   uses: docker/build-push-action@v4
+      #   with:
+      #     context: .
+      #     push: true
+      #     tags: |
+      #       ${{ env.IMAGE_NAME }}:${{ env.SHA_TAG }}  
+      #     build-args: |
+      #       PORT=${{ env.PORT }}
+
+  
+    
 
 
