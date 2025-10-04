@@ -18,5 +18,14 @@ jobs:
       - name: Set DEPLOY_ENV
         run: echo "DEPLOY_ENV=nonprd" >> $GITHUB_ENV
 
+  output:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: print output 
+        run: |
+          echo "Ouput ${{ needs.setup.outputs }}"
+
+
 
 
