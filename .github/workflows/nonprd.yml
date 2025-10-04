@@ -12,6 +12,7 @@ on:
 jobs:
   setup-image-tag:
     runs-on: ubuntu-latest
+    environment: dev 
     env:
       IMAGE_NAME: ghcr.io/morakot-inta/gh-action-nodejs
       DEPLOY_ENV: dev 
@@ -24,6 +25,9 @@ jobs:
         run: |
           COMMIT_SHA=$(echo "${GITHUB_SHA}" | cut -c1-7)
           echo "SHA_TAG=${{ env.IMAGE_NAME }}:${{ env.DEPLOY_ENV }}-${COMMIT_SHA}" >> $GITHUB_ENV
+      - name: print environment variable
+        run: |
+          echo "ECR_NAME: ${{ env.ECR_NAME }}"
     outputs:
       SHA_TAG: ${{ env.SHA_TAG }} 
 
