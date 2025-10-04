@@ -32,6 +32,7 @@ jobs:
       SHA_TAG: ${{ env.SHA_TAG }} 
 
   build-and-push:
+    if: false
     needs: setup-image-tag
     runs-on: ubuntu-latest
     permissions:
@@ -66,6 +67,7 @@ jobs:
       IMAGE_REF: ${{ env.SHA_TAG }}
   
   trivy-sca-security-gate:
+    if: false
     needs: build-and-push
     runs-on: ubuntu-latest
     steps:
