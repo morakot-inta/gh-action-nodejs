@@ -58,6 +58,14 @@ jobs:
             ${{ env.SHA_TAG }}
           build-args: |
             PORT=${{ env.PORT }}
+  
+  deploy:
+    needs: [ build-and-push, setup-image-tag ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deployment step
+        run: echo "${{ needs.setup-image-tag.outputs.SHA_TAG }}"
+
 
   
     
