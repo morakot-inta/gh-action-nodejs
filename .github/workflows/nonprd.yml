@@ -1,0 +1,21 @@
+name: Non-Production workflow
+on:
+  push:
+    branches:
+      - dev 
+    paths-ignore:
+      - 'README.md'
+      - 'LICENSE'
+      - '.github/workflows/**'
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+      - name: Set DEPLOY_ENV
+        run: echo "DEPLOY_ENV=nonprd" >> $GITHUB_ENV
+
+
+
