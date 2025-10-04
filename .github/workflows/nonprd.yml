@@ -35,18 +35,13 @@ jobs:
 
       - name: setup tag image with sha
         id: tag_image
+        env:
+          IMAGE_NAME: ghcr.io/yourusername/your-repo-name
         run: |
-          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
-            echo "This is the main branch."
-            echo "IMAGE_TAG=ghcr.io/yourusername/your-repo-name:main" >> $GITHUB_ENV
-            echo "EDGE_TAG=ghcr.io/yourusername/your-repo-name:edge" >> $GITHUB_ENV
-          else
-            echo "This is a feature branch."
-            BRANCH_NAME=$(echo "${GITHUB_REF#refs/heads/}" | tr '/' '-')
-            echo "IMAGE_TAG=ghcr.io/yourusername/your-repo-name:${BRANCH_NAME}" >> $GITHUB_ENV
-          fi
           COMMIT_SHA=$(echo "${GITHUB_SHA}" | cut -c1-7)
-          echo "SHA_TAG=ghcr.io/yourusername/your-repo-name:${{ env.DEPLOY_ENV }}-${COMMIT_SHA}" >> $GITHUB_ENV
+          echo "SHA_TAG=${{ env.IMAGE_NAME }}:${{ env.DEPLOY_ENV }}-${COMMIT_SHA}" >> $GITHUB_ENV
+
+          echo "GIHUB_ENV : $GITHUB_ENV"
 
 
 
