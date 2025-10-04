@@ -7,7 +7,7 @@ on:
     paths-ignore:
       - 'README.md'
       - 'LICENSE'
-      # - '.github/workflows/**'
+      - '.github/workflows/**'
 
 jobs:
   setup-image-tag:
