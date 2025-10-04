@@ -29,6 +29,13 @@ jobs:
             type=edge
             type=sha,prefix=${{ env.DEPLOY_ENV }}-,priority=750
 
+      # print tag info
+      - name: Print tag info
+        run: |
+          echo "Image Name: ${{ env.IMAGE_NAME }}"
+          echo "Tags: ${{ steps.meta.outputs.tags }}"
+          echo "Labels: ${{ steps.meta.outputs.labels }}"
+
 
 
 
