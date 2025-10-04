@@ -1,8 +1,9 @@
 name: Non-Production workflow
 on:
+  workflow_dispatch:
   push:
     branches:
-      - dev 
+      - 'main' 
     paths-ignore:
       - 'README.md'
       - 'LICENSE'
