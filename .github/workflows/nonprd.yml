@@ -30,6 +30,8 @@ jobs:
   build-and-push:
     needs: setup-image-tag
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
     env:
       IMAGE_NAME: ghcr.io/morakot-inta/gh-action-nodejs
       DEPLOY_ENV: dev
