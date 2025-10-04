@@ -19,20 +19,34 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.IMAGE_NAME }}
-          tags: |
-            type=sha, prefix=${{ env.DEPLOY_ENV }}-
-
+      # - name: Docker meta
+      #   id: meta
+      #   uses: docker/metadata-action@v5
+      #   with:
+      #     images: ${{ env.IMAGE_NAME }}
+      #     tags: |
+      #       type=sha, prefix=${{ env.DEPLOY_ENV }}-
       # print tag info
-      - name: Print tag info
+      # - name: Print tag info
+      #   run: |
+      #     echo "Image Name: ${{ env.IMAGE_NAME }}"
+      #     echo "Tags: ${{ steps.meta.outputs.tags }}"
+      #     echo "Labels: ${{ steps.meta.outputs.labels }}"
+
+      - name: setup tag image with sha
+        id: tag_image
         run: |
-          echo "Image Name: ${{ env.IMAGE_NAME }}"
-          echo "Tags: ${{ steps.meta.outputs.tags }}"
-          echo "Labels: ${{ steps.meta.outputs.labels }}"
+          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            echo "This is the main branch."
+            echo "IMAGE_TAG=ghcr.io/yourusername/your-repo-name:main" >> $GITHUB_ENV
+            echo "EDGE_TAG=ghcr.io/yourusername/your-repo-name:edge" >> $GITHUB_ENV
+          else
+            echo "This is a feature branch."
+            BRANCH_NAME=$(echo "${GITHUB_REF#refs/heads/}" | tr '/' '-')
+            echo "IMAGE_TAG=ghcr.io/yourusername/your-repo-name:${BRANCH_NAME}" >> $GITHUB_ENV
+          fi
+          COMMIT_SHA=$(echo "${GITHUB_SHA}" | cut -c1-7)
+          echo "SHA_TAG=ghcr.io/yourusername/your-repo-name:${{ env.DEPLOY_ENV }}-${COMMIT_SHA}" >> $GITHUB_ENV
 
 
 
