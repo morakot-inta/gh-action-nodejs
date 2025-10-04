@@ -53,7 +53,7 @@ jobs:
           context: .
           push: true
           tags: |
-            $ {{ env.SHA_TAG }}
+            ${{ env.SHA_TAG }}
           build-args: |
             PORT=${{ env.PORT }}
 
